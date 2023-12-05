@@ -8,12 +8,10 @@ namespace CarbookWebAPI.Controllers;
 public class CarController : ControllerBase
 {
     private readonly ICarService _carService;
-    private readonly ILogger<CarController> _logger;
 
-    public CarController(ICarService carService, ILogger<CarController> logger)
+    public CarController(ICarService carService)
     {
         _carService = carService;
-        _logger = logger;
     }
 
     [HttpGet("RandomCar")]
