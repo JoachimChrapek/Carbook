@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CarbookWebAPI.Cars;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CarbookWebAPI.Controllers;
 
@@ -6,45 +7,28 @@ namespace CarbookWebAPI.Controllers;
 [Route("[controller]")]
 public class CarController : ControllerBase
 {
-    private static readonly string[] Models = new[] {
-        "BMW", "Audi", "Ford", "KIA", "Toyota"
-    };
-    
+    private readonly ICarService _carService;
     private readonly ILogger<CarController> _logger;
-    
-    public CarController(ILogger<CarController> logger)
+
+    public CarController(ICarService carService, ILogger<CarController> logger)
     {
+        _carService = carService;
         _logger = logger;
     }
 
-    [HttpGet]
-    [Route("Car")]
-    public Car GetCar()
+    [HttpGet("RandomCar")]
+    public async Task<IActionResult> GetRandomCar()
     {
-        return GetRandomCar();
+        Car car = await _carService.GetRandomCarAsync();
+
+        return Ok(car);
     }
     
-    [HttpGet]
-    [Route("CarsCollection/{count}")]
-    public IEnumerable<Car> GetCarsCollection(int count)
+    [HttpGet("RandomCarsCollection/{count}")]
+    public async Task<IActionResult> GetRandomCarsCollection(int count)
     {
-        return Enumerable.Range(1, count).Select(_ => GetRandomCar());
-    }
-
-    private Car GetRandomCar()
-    {
-        return new Car {
-            Model = Models[Random.Shared.Next(Models.Length)],
-            Mileage = Random.Shared.Next(5, 1000000),
-            ProductionDate = GetRandomProductionDate()
-        };
-    }
-    
-    private DateOnly GetRandomProductionDate()
-    {
-        DateTime start = new (1995, 1, 1);
-        int range = (DateTime.Today - start).Days;
-
-        return DateOnly.FromDateTime(start.AddDays(Random.Shared.Next(range)));
+        IEnumerable<Car> carsCollection = await _carService.GetRandomCarsCollectionAsync(count);
+        
+        return Ok(carsCollection);
     }
 }
