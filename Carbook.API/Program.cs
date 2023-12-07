@@ -5,6 +5,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+// TODO update CORS - research what it is and fix this
+string policyStr = "policy";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: policyStr,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5190");
+        });
+});
+
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -28,6 +40,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(policyStr);
 
 app.UseAuthorization();
 

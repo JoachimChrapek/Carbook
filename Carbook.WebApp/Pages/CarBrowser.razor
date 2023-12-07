@@ -1,0 +1,45 @@
+﻿@page "/carbrowser"
+@inject ICarService _CarService;
+
+<h3>Car Browser</h3>
+
+@if (_carsCollection == null)
+{
+    <p>
+        <em>Empty</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Model</th>
+            <th>Mileage</th>
+            <th>Production date</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (Car car in _carsCollection)
+        {
+            <tr>
+                <td>@car.Model</td>
+                <td>@car.Mileage</td>
+                <td>@car.ProductionDate</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+<button class="btn btn-primary" @onclick="LoadCars">Load cars</button>
+
+@code {
+    private IEnumerable<Car>? _carsCollection;
+
+     private async void LoadCars()
+     {
+         _carsCollection = await _CarService.GetRandomCarsCollectionAsync(5);
+         StateHasChanged();
+     }
+}

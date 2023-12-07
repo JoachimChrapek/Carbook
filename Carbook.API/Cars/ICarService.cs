@@ -1,4 +1,6 @@
-﻿namespace Carbook.API.Cars;
+﻿using Carbook.Shared.Cars;
+
+namespace Carbook.API.Cars;
 
 public interface ICarService
 {

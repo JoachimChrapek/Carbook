@@ -1,4 +1,5 @@
 ﻿using Carbook.API.Logging;
+using Carbook.Shared.Cars;
 
 namespace Carbook.API.Cars;
 

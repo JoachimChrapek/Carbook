@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Carbook.API.Cars;
+namespace Carbook.Shared.Cars;
 
 public class Car
 {

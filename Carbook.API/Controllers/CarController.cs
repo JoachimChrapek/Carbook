@@ -1,4 +1,5 @@
 ﻿using Carbook.API.Cars;
+using Carbook.Shared.Cars;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carbook.API.Controllers;
