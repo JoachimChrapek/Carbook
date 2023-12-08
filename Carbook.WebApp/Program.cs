@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Carbook.WebApp;
 using Carbook.WebApp.Cars;
 
-Console.WriteLine("co jest kurwaaaaaa");
-
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
@@ -21,11 +19,7 @@ var app = builder.Build();
 
 var carService = app.Services.GetRequiredService<ICarService>();
 
-Console.WriteLine("co jest kurwaaa");
-
 var cars = await carService.GetRandomCarsCollectionAsync(2);
-
-Console.WriteLine("co jest kurwa");
 
 if(cars != null)
 {
