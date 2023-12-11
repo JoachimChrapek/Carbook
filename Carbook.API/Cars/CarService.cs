@@ -4,19 +4,32 @@ namespace Carbook.API.Cars;
 
 public class CarService : ICarService
 {
-    private readonly ICarProvider _carProvider;
-    public CarService(ICarProvider carProvider) 
+    //TODO to database
+    private static readonly Dictionary<Guid, Car> _carsCollection = new();
+    
+    public void CreateCar(Car newCar)
     {
-        _carProvider = carProvider;
+        _carsCollection.Add(newCar.Id, newCar);
     }
 
-    public async Task<Car> GetRandomCarAsync()
+    //TODO Result, ErrorOr, OneOf?
+    public Car? GetCar(Guid id)
     {
-        return _carProvider.GetRandomCar();
+        return _carsCollection.GetValueOrDefault(id);
     }
 
-    public async Task<IEnumerable<Car>> GetRandomCarsCollectionAsync(int count)
+    public IEnumerable<Car> GetAllCars()
     {
-        return Enumerable.Range(1, count).Select(_ => _carProvider.GetRandomCar());
+        return _carsCollection.Values;
+    }
+
+    public void UpdateCar(Car updatedCar)
+    {
+        _carsCollection[updatedCar.Id] = updatedCar;
+    }
+
+    public void DeleteCar(Guid id)
+    {
+        _carsCollection.Remove(id);
     }
 }

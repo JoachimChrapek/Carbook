@@ -8,7 +8,7 @@ public static class CorsRegistration
     {
         CorsOptions corsOptions = services.BuildServiceProvider().GetRequiredService<IOptions<CorsOptions>>().Value;
 
-        //TODO invert if and throw(?)
+        //TODO invert if and throw(?), handle wrong config data
         if (corsOptions.AllowedOrigins is not null && corsOptions.AllowedOrigins.Length != 0)
         {
             services.AddCors(options =>

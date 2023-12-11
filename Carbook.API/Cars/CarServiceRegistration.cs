@@ -14,11 +14,6 @@ public static class CarServiceRegistration
         
         services.TryAddScoped<ICarService, CarService>();
         services.TryDecorate<ICarService, LoggedCarService>();
-        
-        services.TryAddScoped<ICarProvider, CarProvider>();
-        services.TryAddScoped<ICarModelProvider, CarModelProvider>();
-        services.TryAddScoped<ICarMileageProvider, CarMileageProvider>();
-        services.TryAddScoped<ICarProductionDateProvider, CarProductionDateProvider>();
 
         return services;
     }

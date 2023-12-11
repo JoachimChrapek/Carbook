@@ -4,6 +4,9 @@ namespace Carbook.API.Cars;
 
 public interface ICarService
 {
-    Task<Car> GetRandomCarAsync();
-    Task<IEnumerable<Car>> GetRandomCarsCollectionAsync(int count);
+    void CreateCar(Car newCar);
+    Car? GetCar(Guid id);
+    IEnumerable<Car> GetAllCars();
+    void UpdateCar(Car updatedCar);
+    void DeleteCar(Guid id);
 }

@@ -14,15 +14,33 @@ public class LoggedCarService : ICarService
         _logger = logger;
     }
 
-    public async Task<Car> GetRandomCarAsync()
+    public void CreateCar(Car newCar)
     {
-        using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(GetRandomCarAsync)}");
-        return await _carService.GetRandomCarAsync();
+        using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(CreateCar)}");
+        _carService.CreateCar(newCar);
     }
 
-    public async Task<IEnumerable<Car>> GetRandomCarsCollectionAsync(int count)
+    public Car? GetCar(Guid id)
     {
-        using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(GetRandomCarsCollectionAsync)}");
-        return await _carService.GetRandomCarsCollectionAsync(count);
+        using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(GetCar)}");
+        return _carService.GetCar(id);
+    }
+
+    public IEnumerable<Car> GetAllCars()
+    {
+        using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(GetAllCars)}");
+        return _carService.GetAllCars();
+    }
+
+    public void UpdateCar(Car updatedCar)
+    {
+        using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(UpdateCar)}");
+        _carService.UpdateCar(updatedCar);
+    }
+
+    public void DeleteCar(Guid id)
+    {
+        using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(DeleteCar)}");
+        _carService.DeleteCar(id);
     }
 }
