@@ -1,0 +1,48 @@
+﻿@page "/CreateCarPopup"
+
+<table class="table">
+    <tr>
+        <td style="width: 150px">Make:</td>
+        <td>
+            <input @bind="_currentEditCar.Make">
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 150px">Model:</td>
+        <td>
+            <input @bind="_currentEditCar.Model">
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 150px">Production date:</td>
+        <td>
+            <input type="date" @bind="_currentEditCar.ProductionDate">
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 150px">Mileage:</td>
+        <td>
+            <input type="number" @bind="_currentEditCar.Mileage">
+        </td>
+    </tr>
+</table>
+
+<button class="btn btn-primary" @onclick="Confirm">Create</button>
+<button class="btn btn-primary" @onclick="Cancel">Cancel</button>
+
+@code {
+    [CascadingParameter]
+    BlazoredModalInstance Modal { get; set; } = default!;
+
+    private readonly EditCarModel _currentEditCar = new();
+
+    private async Task Confirm()
+    {
+        await Modal.CloseAsync(ModalResult.Ok(_currentEditCar));
+    }
+    
+    private async Task Cancel()
+    {
+        await Modal.CancelAsync();
+    }
+}

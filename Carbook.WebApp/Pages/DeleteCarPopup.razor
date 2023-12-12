@@ -1,0 +1,25 @@
+﻿@page "/DeleteCarPopup"
+
+<p>Are you sure you want to delete car with ID </p>
+<p><b>@CarId</b></p>
+
+<button class="btn btn-primary" @onclick="Confirm">Confirm</button>
+<button class="btn btn-primary" @onclick="Cancel">Cancel</button>
+
+@code {
+    [CascadingParameter]
+    BlazoredModalInstance Modal { get; set; } = default!;
+    
+    [Parameter]
+    public Guid? CarId { get; set; }
+
+    private async Task Confirm()
+    {
+        await Modal.CloseAsync(ModalResult.Ok());
+    }
+    
+    private async Task Cancel()
+    {
+        await Modal.CancelAsync();
+    }
+}

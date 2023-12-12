@@ -1,4 +1,4 @@
-using Carbook.Shared.Cars;
+using Blazored.Modal;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Carbook.WebApp;
@@ -15,18 +15,8 @@ builder.Services.AddScoped(sp => new HttpClient {
     BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
 });
 
+builder.Services.AddBlazoredModal();
+
 var app = builder.Build();
-
-var carService = app.Services.GetRequiredService<ICarService>();
-
-var cars = await carService.GetRandomCarsCollectionAsync(2);
-
-if(cars != null)
-{
-    foreach (Car car in cars)
-    {
-        Console.WriteLine(car.ToString());
-    }
-}
 
 await app.RunAsync();

@@ -1,4 +1,5 @@
 ﻿@page "/carbrowser"
+@using Carbook.Shared.Contract
 @inject ICarService _CarService;
 
 <h3>Car Browser</h3>
@@ -14,32 +15,215 @@ else
     <table class="table">
         <thead>
         <tr>
+            <th>ID</th>
+            <th>Make</th>
             <th>Model</th>
-            <th>Mileage</th>
             <th>Production date</th>
+            <th>Mileage</th>
+            <th>Last Modified Date</th>
+            <th>Get details</th>
+            <th>Edit</th>
+            <th>Delete</th>
         </tr>
         </thead>
         <tbody>
-        @foreach (Car car in _carsCollection)
+        @foreach (CarResponse car in _carsCollection)
         {
             <tr>
+                <td>@car.Id</td>
+                <td>@car.Make</td>
                 <td>@car.Model</td>
-                <td>@car.Mileage</td>
                 <td>@car.ProductionDate</td>
+                <td>@car.Mileage</td>
+                <td>@car.LastModifiedDateTime</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => GetCurrentCar(car.Id)">Get</button>
+                </td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => ShowUpdateCarPopup(car.Id)">Edit</button>
+                </td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => DeleteCar(car.Id)">Delete</button>
+                </td>
             </tr>
         }
         </tbody>
     </table>
 }
 
-<button class="btn btn-primary" @onclick="LoadCars">Load cars</button>
+<button class="btn btn-primary" @onclick="ShowCreateCarPopup">Create</button>
+@* <button class="btn btn-primary" @onclick="LoadCars">Load cars</button> *@
+
+<div style="height: 50px"></div>
+
+<h5>Get car details</h5>
+
+<table class="table">
+    <tbody>
+    <tr>
+        <td style="width: 150px">ID:</td>
+        <td style="width: 450px">
+            <input size="50px" @bind="_currentCarId">
+        </td>
+        <td>
+            <button style="width: 100px" class="btn btn-primary" @onclick="GetCurrentCar">Get</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+@if (_currentGetCarResponse == null)
+{
+    <p>
+        <em>Empty</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <td style="width: 150px">ID:</td>
+            <td>@_currentGetCarResponse.Id</td>
+        </tr>
+        <tr>
+            <td style="width: 150px">Make:</td>
+            <td>@_currentGetCarResponse.Make</td>
+        </tr>
+        <tr>
+            <td style="width: 150px">Model:</td>
+            <td>@_currentGetCarResponse.Model</td>
+        </tr>
+        <tr>
+            <td style="width: 150px">Production date:</td>
+            <td>@_currentGetCarResponse.ProductionDate</td>
+        </tr>
+        <tr>
+            <td style="width: 150px">Mileage:</td>
+            <td>@_currentGetCarResponse.Mileage</td>
+        </tr>
+        <tr>
+            <td style="width: 150px">Last modified date:</td>
+            <td>@_currentGetCarResponse.LastModifiedDateTime</td>
+        </tr>
+    </table>
+}
 
 @code {
-    private IEnumerable<Car>? _carsCollection;
+    [CascadingParameter]
+    IModalService Modal { get; set; } = default!;
 
-     private async void LoadCars()
-     {
-         _carsCollection = await _CarService.GetRandomCarsCollectionAsync(5);
-         StateHasChanged();
-     }
+    private IEnumerable<CarResponse>? _carsCollection;
+    private Guid _currentCarId;
+    private CarResponse? _currentGetCarResponse;
+
+    protected override Task OnInitializedAsync()
+    {
+        return LoadCars();
+    }
+
+    private async Task LoadCars()
+    {
+        CarsCollectionResponse? carsCollectionResponse = await _CarService.GetAllCars();
+
+        if (carsCollectionResponse == null)
+        {
+            return;
+        }
+
+        _carsCollection = carsCollectionResponse.CarsCollection;
+        StateHasChanged();
+    }
+
+    private void GetCurrentCar(Guid id)
+    {
+        _currentCarId = id;
+        GetCurrentCar();
+    }
+    
+    private void GetCurrentCar()
+    {
+        GetCar(_currentCarId);
+    }
+
+    private async void GetCar(Guid id)
+    {
+        _currentGetCarResponse = await _CarService.GetCar(id);
+        StateHasChanged();
+    }
+
+    private async void ShowCreateCarPopup()
+    {
+        IModalReference editCarModal = Modal.Show<CreateCarPopup>("Create car");
+        ModalResult modalResult = await editCarModal.Result;
+
+        if (modalResult.Confirmed)
+        {
+            EditCarModel? editCarModel = modalResult.Data as EditCarModel;
+            await CreateCar(editCarModel);
+        }
+
+        StateHasChanged();
+    }
+    
+    private async Task CreateCar(EditCarModel? editCarModel)
+    {
+        if (editCarModel == null)
+        {
+            return;
+        }
+        
+        await _CarService.CreateCar(editCarModel.ToCar());
+        await LoadCars();
+    }
+
+    private async void ShowUpdateCarPopup(Guid id)
+    {
+        CarResponse? carResponse = await _CarService.GetCar(id);
+
+        if (carResponse != null)
+        {
+            ModalParameters parameters = new();
+            parameters.Add(nameof(UpdateCarPopup.CurrentEditCar), EditCarModel.From(carResponse));
+
+            IModalReference editCarModal = Modal.Show<UpdateCarPopup>("Edit car", parameters);
+            ModalResult modalResult = await editCarModal.Result;
+
+            if (modalResult.Confirmed)
+            {
+                EditCarModel? editCarModel = modalResult.Data as EditCarModel;
+                UpdateCar(editCarModel);
+            }
+
+            StateHasChanged();
+        }
+    }
+
+    private async void UpdateCar(EditCarModel? editCarModel)
+    {
+        if (editCarModel == null)
+        {
+            return;
+        }
+        
+        await _CarService.UpdateCar(editCarModel.Id, editCarModel.ToCar());
+        await LoadCars();
+    }
+
+    private async void DeleteCar(Guid id)
+    {
+        ModalParameters parameters = new();
+        parameters.Add(nameof(DeleteCarPopup.CarId), id);
+
+        IModalReference editCarModal = Modal.Show<DeleteCarPopup>("Delete car", parameters);
+        ModalResult modalResult = await editCarModal.Result;
+
+        if (modalResult.Confirmed)
+        {
+            await _CarService.DeleteCar(id);
+            await LoadCars();
+        }
+
+        StateHasChanged();
+    }
+
 }
