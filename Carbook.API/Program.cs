@@ -1,5 +1,7 @@
 using Carbook.API.Cars;
+using Carbook.API.Database;
 using Carbook.API.Setup;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddCarServices();
+builder.Services.AddDbContext<CarsDbContext>(options =>
+{
+    options.UseSqlite("Data Source=Cars.db");
+});
 
 var app = builder.Build();
 

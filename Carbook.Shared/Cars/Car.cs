@@ -4,15 +4,17 @@ namespace Carbook.Shared.Cars;
 
 public class Car
 {
-    public Guid Id { get; }
-    
-    public string Make { get; }
-    public string Model { get; }
-    public DateOnly ProductionDate { get; }
-    public int Mileage { get; }
+    public Guid Id { get; private set; }
 
-    public DateTime LastModifiedDateTime { get; }
-    
+    public string Make { get; private set; }
+    public string Model { get; private set; }
+    public DateOnly ProductionDate { get; private set; }
+    public int Mileage { get; private set; }
+
+    public DateTime LastModifiedDateTime { get; private set; }
+
+    private Car() { }
+
     public Car(Guid id, string make, string model, DateOnly productionDate, int mileage, DateTime lastModifiedDateTime)
     {
         Id = id;
@@ -22,7 +24,7 @@ public class Car
         Mileage = mileage;
         LastModifiedDateTime = lastModifiedDateTime;
     }
-    
+
     public override string ToString()
     {
         StringBuilder builder = new();
@@ -32,7 +34,7 @@ public class Car
         builder.AppendLine($"{nameof(Mileage)}: {Mileage}");
         builder.AppendLine($"{nameof(ProductionDate)}: {ProductionDate:O}");
         builder.AppendLine($"{nameof(LastModifiedDateTime)}: {LastModifiedDateTime:O}");
-        
+
         return builder.ToString();
     }
 }
