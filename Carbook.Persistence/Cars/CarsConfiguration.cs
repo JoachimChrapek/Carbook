@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Carbook.API.Database;
+namespace Carbook.Persistence.Cars;
 
 public class CarsConfiguration : IEntityTypeConfiguration<Car>
 {

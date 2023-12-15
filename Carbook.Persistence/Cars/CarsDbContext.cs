@@ -1,7 +1,7 @@
 ﻿using Carbook.Domain.Cars;
 using Microsoft.EntityFrameworkCore;
 
-namespace Carbook.API.Database;
+namespace Carbook.Persistence.Cars;
 
 public class CarsDbContext : DbContext
 {
