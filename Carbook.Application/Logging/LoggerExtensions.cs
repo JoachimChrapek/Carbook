@@ -1,4 +1,6 @@
-﻿namespace Carbook.API.Logging;
+﻿using Microsoft.Extensions.Logging;
+
+namespace Carbook.Application.Logging;
 
 public static class LoggerExtensions
 {

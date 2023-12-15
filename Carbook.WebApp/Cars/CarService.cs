@@ -1,5 +1,4 @@
-﻿using Carbook.Shared.Cars;
-using Carbook.Shared.Contract;
+﻿using Carbook.Contracts;
 using System.Net.Http.Json;
 
 namespace Carbook.WebApp.Cars;

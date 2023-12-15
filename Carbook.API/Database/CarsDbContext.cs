@@ -1,4 +1,4 @@
-﻿using Carbook.Shared.Cars;
+﻿using Carbook.Domain.Cars;
 using Microsoft.EntityFrameworkCore;
 
 namespace Carbook.API.Database;

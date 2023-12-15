@@ -17,7 +17,7 @@ namespace Carbook.API.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.14");
 
-            modelBuilder.Entity("Carbook.Shared.Cars.Car", b =>
+            modelBuilder.Entity("Carbook.Contracts.Cars.Car", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

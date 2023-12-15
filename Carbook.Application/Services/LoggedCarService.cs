@@ -1,7 +1,8 @@
-﻿using Carbook.API.Logging;
-using Carbook.Shared.Cars;
+﻿using Carbook.Application.Logging;
+using Carbook.Domain.Cars;
+using Microsoft.Extensions.Logging;
 
-namespace Carbook.API.Cars;
+namespace Carbook.Application.Services;
 
 public class LoggedCarService : ICarService
 {

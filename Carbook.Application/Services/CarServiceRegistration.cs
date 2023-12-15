@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Carbook.Application.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Carbook.API.Cars;
 
@@ -13,7 +15,7 @@ public static class CarServiceRegistration
         // });
         
         services.TryAddScoped<ICarService, CarService>();
-        services.TryDecorate<ICarService, LoggedCarService>();
+        //services.TryDecorate<ICarService, LoggedCarService>();
 
         return services;
     }

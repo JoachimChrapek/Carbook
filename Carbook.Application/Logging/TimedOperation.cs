@@ -1,6 +1,7 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
-namespace Carbook.API.Logging;
+namespace Carbook.Application.Logging;
 
 public class TimedOperation<T> : IDisposable
 {
@@ -8,6 +9,7 @@ public class TimedOperation<T> : IDisposable
     private readonly LogLevel _logLevel;
     private readonly string _message;
     private readonly Stopwatch _stopwatch;
+    
     public TimedOperation(ILogger<T> logger, LogLevel logLevel, string message)
     {
         _logger = logger;

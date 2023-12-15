@@ -1,6 +1,8 @@
 ﻿using Carbook.API.Cars;
-using Carbook.Shared.Cars;
-using Carbook.Shared.Contract;
+using Carbook.API.Extensions;
+using Carbook.Application.Services;
+using Carbook.Contracts;
+using Carbook.Domain.Cars;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carbook.API.Controllers;
@@ -21,8 +23,8 @@ public class CarsController : ControllerBase
     {
         Car car = new (Guid.NewGuid(), request.Make, request.Model, request.ProductionDate, request.Mileage, DateTime.UtcNow);
         _carService.CreateCar(car);
-        
-        CarResponse response = CarResponse.From(car);
+
+        CarResponse response = car.ToCarResponse();
         
         return CreatedAtAction(nameof(GetCar), new {id = car.Id}, response);
     }
@@ -37,7 +39,7 @@ public class CarsController : ControllerBase
             return NotFound();
         }
         
-        CarResponse response = CarResponse.From(car);
+        CarResponse response = car.ToCarResponse();
         
         return Ok(response);
     }
@@ -46,7 +48,7 @@ public class CarsController : ControllerBase
     public IActionResult GetAllCars()
     {
         IEnumerable<Car> cars = _carService.GetAllCars();
-        CarsCollectionResponse response = new(cars.Select(c => CarResponse.From(c)));
+        CarsCollectionResponse response = new(cars.Select(c => c.ToCarResponse()));
 
         return Ok(response);
     }
@@ -57,7 +59,7 @@ public class CarsController : ControllerBase
         Car car = new (id, request.Make, request.Model, request.ProductionDate, request.Mileage, DateTime.UtcNow);
         _carService.UpdateCar(car);
         
-        CarResponse response = CarResponse.From(car);
+        CarResponse response = car.ToCarResponse();
         
         return CreatedAtAction(nameof(GetCar), new {id = car.Id}, response);
     }

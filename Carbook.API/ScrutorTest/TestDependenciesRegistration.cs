@@ -1,4 +1,5 @@
 ﻿using Carbook.API.Cars;
+using Carbook.Application.Services;
 using Scrutor;
 
 namespace Carbook.API.ScrutorTest;
