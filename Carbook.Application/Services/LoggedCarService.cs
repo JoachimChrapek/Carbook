@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Carbook.Application.Services;
 
+//TODO maybe not in application layer?
 public class LoggedCarService : ICarService
 {
     private readonly ICarService _carService;
@@ -15,33 +16,33 @@ public class LoggedCarService : ICarService
         _logger = logger;
     }
 
-    public void CreateCar(Car newCar)
+    public async Task CreateCarAsync(Car newCar)
     {
-        using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(CreateCar)}");
-        _carService.CreateCar(newCar);
+        using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(CreateCarAsync)}");
+        await _carService.CreateCarAsync(newCar);
     }
 
-    public Car? GetCar(Guid id)
+    public Task<Car?> GetCarAsync(Guid id)
     {
-        using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(GetCar)}");
-        return _carService.GetCar(id);
+        using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(GetCarAsync)}");
+        return _carService.GetCarAsync(id);
     }
 
-    public IEnumerable<Car> GetAllCars()
+    public Task<IEnumerable<Car>> GetAllCarsAsync()
     {
-        using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(GetAllCars)}");
-        return _carService.GetAllCars();
+        using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(GetAllCarsAsync)}");
+        return _carService.GetAllCarsAsync();
     }
 
-    public void UpdateCar(Car updatedCar)
+    public Task UpdateCarAsync(Car updatedCar)
     {
-        using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(UpdateCar)}");
-        _carService.UpdateCar(updatedCar);
+        using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(UpdateCarAsync)}");
+        return _carService.UpdateCarAsync(updatedCar);
     }
 
-    public void DeleteCar(Guid id)
+    public Task DeleteCarAsync(Guid id)
     {
-        using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(DeleteCar)}");
-        _carService.DeleteCar(id);
+        using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(DeleteCarAsync)}");
+        return _carService.DeleteCarAsync(id);
     }
 }

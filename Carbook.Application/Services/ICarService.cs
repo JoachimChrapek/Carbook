@@ -4,9 +4,9 @@ namespace Carbook.Application.Services;
 
 public interface ICarService
 {
-    void CreateCar(Car newCar);
-    Car? GetCar(Guid id);
-    IEnumerable<Car> GetAllCars();
-    void UpdateCar(Car updatedCar);
-    void DeleteCar(Guid id);
+    Task CreateCarAsync(Car newCar);
+    Task<Car?> GetCarAsync(Guid id);
+    Task<IEnumerable<Car>> GetAllCarsAsync();
+    Task UpdateCarAsync(Car updatedCar);
+    Task DeleteCarAsync(Guid id);
 }

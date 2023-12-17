@@ -1,5 +1,6 @@
 ﻿using Carbook.Application.Common.Persistence;
 using Carbook.Domain.Cars;
+using Microsoft.EntityFrameworkCore;
 
 namespace Carbook.Persistence.Cars;
 
@@ -12,31 +13,31 @@ public class CarsRepository : ICarsRepository
         _carsDbContext = carsDbContext;
     }
 
-    public void Add(Car car)
+    public async Task AddCarAsync(Car car)
     {
-        _carsDbContext.Cars.Add(car);
-        _carsDbContext.SaveChanges();
+        await _carsDbContext.Cars.AddAsync(car);
+        await _carsDbContext.SaveChangesAsync();
     }
 
-    public void Update(Car car)
+    public async Task UpdateCarAsync(Car car)
     {
-        if (_carsDbContext.Cars.Any(c => c.Id == car.Id))
+        bool isCarAlreadyAdded = await _carsDbContext.Cars.AnyAsync(c => c.Id == car.Id);
+        
+        if (isCarAlreadyAdded)
         {
             _carsDbContext.Cars.Update(car);
         }
         else
         {
-            _carsDbContext.Cars.Add(car);
+            await _carsDbContext.Cars.AddAsync(car);
         }
 
-        _carsDbContext.SaveChanges();
-        
-        throw new NotImplementedException();
+        await _carsDbContext.SaveChangesAsync();
     }
 
-    public void Delete(Guid id)
+    public async Task DeleteCarAsync(Guid id)
     {
-        Car? car = _carsDbContext.Cars.Find(id);
+        Car? car = await _carsDbContext.Cars.FindAsync(id);
 
         if (car == null)
         {
@@ -45,24 +46,24 @@ public class CarsRepository : ICarsRepository
         }
         
         _carsDbContext.Remove(car);
-        _carsDbContext.SaveChanges();
+        await _carsDbContext.SaveChangesAsync();
     }
 
-    public Car? Get(Guid id)
+    public async Task<Car?> GetCarAsync(Guid id)
     {
-        Car? car = _carsDbContext.Cars.Find(id);
+        Car? car = await _carsDbContext.Cars.FindAsync(id);
         
         //TODO error if null
         return car;
     }
 
-    public IEnumerable<Car> GetAll()
+    public async Task<IEnumerable<Car>> GetAllCarsAsync()
     {
-        return _carsDbContext.Cars.AsEnumerable();
+        return await _carsDbContext.Cars.ToListAsync();
     }
 
-    public bool IsCarAdded(Guid id)
+    public Task<bool> IsCarAddedAsync(Guid id)
     {
-        return _carsDbContext.Cars.Any(c => c.Id == id);
+        return _carsDbContext.Cars.AnyAsync(c => c.Id == id);
     }
 }

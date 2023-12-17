@@ -1,5 +1,4 @@
-﻿using Carbook.API.Cars;
-using Carbook.API.Extensions;
+﻿using Carbook.API.Extensions;
 using Carbook.Application.Services;
 using Carbook.Contracts;
 using Carbook.Domain.Cars;
@@ -19,10 +18,10 @@ public class CarsController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreateCar(CreateCarRequest request)
+    public async Task<CreatedAtActionResult> CreateCar(CreateCarRequest request)
     {
         Car car = new (Guid.NewGuid(), request.Make, request.Model, request.ProductionDate, request.Mileage, DateTime.UtcNow);
-        _carService.CreateCar(car);
+        await _carService.CreateCarAsync(car);
 
         CarResponse response = car.ToCarResponse();
         
@@ -30,9 +29,9 @@ public class CarsController : ControllerBase
     }
     
     [HttpGet("{id:guid}")]
-    public IActionResult GetCar(Guid id)
+    public async Task<IActionResult> GetCar(Guid id)
     {
-        Car? car = _carService.GetCar(id);
+        Car? car = await _carService.GetCarAsync(id);
 
         if (car == null)
         {
@@ -45,19 +44,19 @@ public class CarsController : ControllerBase
     }
     
     [HttpGet("all")]
-    public IActionResult GetAllCars()
+    public async Task<IActionResult> GetAllCars()
     {
-        IEnumerable<Car> cars = _carService.GetAllCars();
+        IEnumerable<Car> cars = await _carService.GetAllCarsAsync();
         CarsCollectionResponse response = new(cars.Select(c => c.ToCarResponse()));
 
         return Ok(response);
     }
     
     [HttpPut("{id:guid}")]
-    public IActionResult UpdateCar(Guid id, UpdateCarRequest request)
+    public async Task<IActionResult> UpdateCar(Guid id, UpdateCarRequest request)
     {
         Car car = new (id, request.Make, request.Model, request.ProductionDate, request.Mileage, DateTime.UtcNow);
-        _carService.UpdateCar(car);
+        await _carService.UpdateCarAsync(car);
         
         CarResponse response = car.ToCarResponse();
         
@@ -65,9 +64,9 @@ public class CarsController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
-    public IActionResult DeleteCar(Guid id)
+    public async Task<IActionResult> DeleteCar(Guid id)
     {
-        _carService.DeleteCar(id);
+        await _carService.DeleteCarAsync(id);
         
         return NoContent();
     }

@@ -4,11 +4,11 @@ namespace Carbook.Application.Common.Persistence;
 
 public interface ICarsRepository
 {
-    void Add(Car car);
-    void Update(Car car);
-    void Delete(Guid id);
+    Task AddCarAsync(Car car);
+    Task UpdateCarAsync(Car car);
+    Task DeleteCarAsync(Guid id);
     
-    Car? Get(Guid id);
-    IEnumerable<Car> GetAll();
-    bool IsCarAdded(Guid id);
+    Task<Car?> GetCarAsync(Guid id);
+    Task<IEnumerable<Car>> GetAllCarsAsync();
+    Task<bool> IsCarAddedAsync(Guid id);
 }

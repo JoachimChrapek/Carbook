@@ -12,15 +12,15 @@ public class CarService : ICarService
         _carsRepository = carsRepository;
     }
 
-    public void CreateCar(Car newCar)
+    public Task CreateCarAsync(Car newCar)
     {
-        _carsRepository.Add(newCar);
+        return _carsRepository.AddCarAsync(newCar);
     }
 
     //TODO Result, ErrorOr, OneOf?
-    public Car? GetCar(Guid id)
+    public async Task<Car?> GetCarAsync(Guid id)
     {
-        Car? car = _carsRepository.Get(id);
+        Car? car = await _carsRepository.GetCarAsync(id);
 
         if (car == null)
         {
@@ -31,36 +31,27 @@ public class CarService : ICarService
         return car;
     }
 
-    public IEnumerable<Car> GetAllCars()
+    public Task<IEnumerable<Car>> GetAllCarsAsync()
     {
-        return _carsRepository.GetAll();
+        return _carsRepository.GetAllCarsAsync();
     }
 
-    public void UpdateCar(Car updatedCar)
+    public async Task UpdateCarAsync(Car updatedCar)
     {
-        if (_carsRepository.IsCarAdded(updatedCar.Id))
+        bool isCarAlreadyAdded = await _carsRepository.IsCarAddedAsync(updatedCar.Id);
+
+        if (isCarAlreadyAdded)
         {
-            _carsRepository.Update(updatedCar);
+            await _carsRepository.UpdateCarAsync(updatedCar);
         }
         else
         {
-            _carsRepository.Add(updatedCar);
+            await _carsRepository.AddCarAsync(updatedCar);
         }
     }
 
-    public void DeleteCar(Guid id)
+    public Task DeleteCarAsync(Guid id)
     {
-        _carsRepository.Delete(id);
-        
-        // Car? car = _carsDbContext.Cars.Find(id);
-        //
-        // if (car == null)
-        // {
-        //     // TODO NotFound
-        //     return;
-        // }
-        //
-        // _carsDbContext.Remove(car);
-        // _carsDbContext.SaveChanges();
+        return _carsRepository.DeleteCarAsync(id);
     }
 }
