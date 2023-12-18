@@ -44,6 +44,7 @@ public class CarsController : ControllerBase
         return Ok(response);
     }
     
+    //TODO change this - this will be problematic with bigger database
     [HttpGet("all")]
     public async Task<IActionResult> GetAllCars()
     {
