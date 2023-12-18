@@ -6,6 +6,7 @@ public class Car
 {
     public Guid Id { get; private set; }
 
+    public CarType Type { get; private set; }
     public string Make { get; private set; }
     public string Model { get; private set; }
     public DateOnly ProductionDate { get; private set; }
@@ -15,9 +16,10 @@ public class Car
 
     private Car() { }
 
-    public Car(Guid id, string make, string model, DateOnly productionDate, int mileage, DateTime lastModifiedDateTime)
+    public Car(Guid id, CarType type, string make, string model, DateOnly productionDate, int mileage, DateTime lastModifiedDateTime)
     {
         Id = id;
+        Type = type;
         Make = make;
         Model = model;
         ProductionDate = productionDate;
@@ -29,6 +31,7 @@ public class Car
     {
         StringBuilder builder = new();
         builder.AppendLine($"{nameof(Id)}: {Id}");
+        builder.AppendLine($"{nameof(Type)}: {Type}");
         builder.AppendLine($"{nameof(Make)}: {Make}");
         builder.AppendLine($"{nameof(Model)}: {Model}");
         builder.AppendLine($"{nameof(Mileage)}: {Mileage}");

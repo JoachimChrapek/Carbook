@@ -3,6 +3,7 @@ using Carbook.Application.Services;
 using Carbook.Contracts;
 using Carbook.Domain.Cars;
 using Microsoft.AspNetCore.Mvc;
+using DomainCarType = Carbook.Domain.Cars.CarType;
 
 namespace Carbook.API.Controllers;
 
@@ -20,7 +21,7 @@ public class CarsController : ControllerBase
     [HttpPost]
     public async Task<CreatedAtActionResult> CreateCar(CreateCarRequest request)
     {
-        Car car = new (Guid.NewGuid(), request.Make, request.Model, request.ProductionDate, request.Mileage, DateTime.UtcNow);
+        Car car = new (Guid.NewGuid(), (DomainCarType) request.Type, request.Make, request.Model, request.ProductionDate, request.Mileage, DateTime.UtcNow);
         await _carService.CreateCarAsync(car);
 
         CarResponse response = car.ToCarResponse();
@@ -55,7 +56,7 @@ public class CarsController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateCar(Guid id, UpdateCarRequest request)
     {
-        Car car = new (id, request.Make, request.Model, request.ProductionDate, request.Mileage, DateTime.UtcNow);
+        Car car = new (id, (DomainCarType) request.Type, request.Make, request.Model, request.ProductionDate, request.Mileage, DateTime.UtcNow);
         await _carService.UpdateCarAsync(car);
         
         CarResponse response = car.ToCarResponse();

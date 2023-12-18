@@ -1,3 +1,3 @@
 ﻿namespace Carbook.Contracts;
 
-public record CarResponse(Guid Id, string Make, string Model, DateOnly ProductionDate, int Mileage, DateTime LastModifiedDateTime);
+public record CarResponse(Guid Id, CarType Type, string Make, string Model, DateOnly ProductionDate, int Mileage, DateTime LastModifiedDateTime);

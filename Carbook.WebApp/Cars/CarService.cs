@@ -1,5 +1,6 @@
 ﻿using Carbook.Contracts;
 using System.Net.Http.Json;
+using ContractsCarType = Carbook.Contracts.CarType;
 
 namespace Carbook.WebApp.Cars;
 
@@ -21,7 +22,7 @@ public class CarService : ICarService
         string url = $"{_apiAddress}";
         HttpClient httpClient = _httpClientFactory.CreateClient();
 
-        CreateCarRequest request = new(car.Make, car.Model, car.ProductionDate, car.Mileage);
+        CreateCarRequest request = new((ContractsCarType) car.Type, car.Make, car.Model, car.ProductionDate, car.Mileage);
         HttpResponseMessage response;
 
         try
@@ -100,7 +101,7 @@ public class CarService : ICarService
         string url = $"{_apiAddress}{id}";
         HttpClient httpClient = _httpClientFactory.CreateClient();
 
-        UpdateCarRequest request = new(newCar.Make, newCar.Model, newCar.ProductionDate, newCar.Mileage);
+        UpdateCarRequest request = new((ContractsCarType) newCar.Type, newCar.Make, newCar.Model, newCar.ProductionDate, newCar.Mileage);
         HttpResponseMessage response;
 
         try

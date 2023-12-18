@@ -2,6 +2,17 @@
 
 <table class="table">
     <tr>
+        <td style="width: 150px">Type:</td>
+        <td>
+            <InputSelect @bind-Value="@CurrentEditCar.Type">
+                @foreach (var type in Enum.GetValues(typeof(CarType)))
+                {
+                    <option value="@type">@type</option>
+                }
+            </InputSelect>
+        </td>
+    </tr>
+    <tr>
         <td style="width: 150px">ID:</td>
         <td>@CurrentEditCar.Id</td>
     </tr>
@@ -49,9 +60,10 @@
     {
         await Modal.CloseAsync(ModalResult.Ok(CurrentEditCar));
     }
-    
+
     private async Task Cancel()
     {
         await Modal.CancelAsync();
     }
+
 }

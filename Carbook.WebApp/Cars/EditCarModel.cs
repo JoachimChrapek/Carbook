@@ -6,6 +6,7 @@ public class EditCarModel
 {
     public Guid Id { get; set; }
     
+    public CarType Type { get; set; }
     public string Make { get; set; } = string.Empty;
     public string Model { get; set; } = string.Empty;
     public DateOnly ProductionDate { get; set; }
@@ -15,7 +16,7 @@ public class EditCarModel
 
     public Car ToCar()
     {
-        return new(Id, Make, Model, ProductionDate, Mileage, LastModifiedDateTime);
+        return new(Id, Type, Make, Model, ProductionDate, Mileage, LastModifiedDateTime);
     }
 
     public static EditCarModel From(Car car)

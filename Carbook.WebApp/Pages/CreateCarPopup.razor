@@ -2,6 +2,17 @@
 
 <table class="table">
     <tr>
+        <td style="width: 150px">Type:</td>
+            <td>
+            <InputSelect @bind-Value="@_currentEditCar.Type">
+                @foreach (var type in Enum.GetValues(typeof(CarType)))
+                {
+                    <option value="@type">@type</option>
+                }
+            </InputSelect>
+            </td>
+        </tr>
+    <tr>
         <td style="width: 150px">Make:</td>
         <td>
             <input @bind="_currentEditCar.Make">
