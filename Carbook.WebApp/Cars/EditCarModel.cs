@@ -23,6 +23,7 @@ public class EditCarModel
     {
         return new EditCarModel {
             Id = car.Id,
+            Type = car.Type,
             Make = car.Make,
             Model = car.Model,
             ProductionDate = car.ProductionDate,
@@ -35,6 +36,7 @@ public class EditCarModel
     {
         return new EditCarModel {
             Id = car.Id,
+            Type = (CarType)car.Type,
             Make = car.Make,
             Model = car.Model,
             ProductionDate = car.ProductionDate,
