@@ -9,6 +9,13 @@ public class CarsConfiguration : IEntityTypeConfiguration<Car>
     public void Configure(EntityTypeBuilder<Car> builder)
     {
         builder.HasKey(c => c.Id);
+        builder.Property(c => c.Id)
+            .ValueGeneratedNever();
+
+        builder.Property(c => c.Type)
+            .HasConversion(
+                carType => carType.ToString(),
+                value => Enum.Parse<CarType>(value));
         
         //TODO change
         builder.Property(c => c.Make)
