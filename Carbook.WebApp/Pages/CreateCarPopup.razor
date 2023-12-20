@@ -45,7 +45,7 @@
     [CascadingParameter]
     BlazoredModalInstance Modal { get; set; } = default!;
 
-    private readonly EditCarModel _currentEditCar = new();
+    private readonly EditCarModel _currentEditCar = new() {ProductionDate = DateOnly.FromDateTime(DateTime.Now)};
 
     private async Task Confirm()
     {
