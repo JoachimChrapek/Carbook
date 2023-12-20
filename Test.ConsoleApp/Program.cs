@@ -1,53 +1,65 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Microsoft.Extensions.DependencyInjection;
+﻿using FazApp.Result;
 
 Console.WriteLine("Hello, World!");
 
+var result1 = DoSomething();
 
-ServiceCollection services = new ();
-
-services.AddSingleton<IApp, App>();
-services.AddSingleton<ILogger, ConsoleLogger>();
-
-ServiceProvider servicesProvider = services.BuildServiceProvider();
-
-IApp app = servicesProvider.GetRequiredService<IApp>();
-
-app.Run();
-
-
-
-
-
-public interface IApp
-{
-    void Run();
-}
-
-public class App : IApp
-{
-    private readonly ILogger _logger;
-    
-    public App(ILogger logger) 
+result1.Switch(() =>
     {
-        _logger = logger;
+        Console.WriteLine("DoSomething success");
+    },
+    errors =>
+    {
+        Console.WriteLine("DoSomething had errors");
+
+        foreach (var error in errors)
+        {
+            Console.WriteLine($"[{error.Type}] {error.Code} - {error.Description}");
+        }
+    });
+
+
+
+var result2 = GetSomething();
+
+var result2Value = result2.Match(
+    onValue: value =>
+    {
+        Console.WriteLine($"GetSomething success. Value: {value}");
+        return value;
+    },
+    onError: errors =>
+    {
+        Console.WriteLine("GetSomething had errors");
+
+        foreach (var error in errors)
+        {
+            Console.WriteLine($"[{error.Type}] {error.Code} - {error.Description}");
+        }
+
+        return default;
+    });
+
+return;
+
+Result DoSomething()
+{
+    if (Random.Shared.Next(2) < 1)
+    {
+        Error error = new Error(ErrorType.Unexpected, "ConsoleApp.Random", "Random error has occured");
+        return error;
     }
 
-    public void Run()
-    {
-        _logger.Log("App started");
-    }
+    return Result.Success;
 }
 
-public interface ILogger
+Result<int> GetSomething()
 {
-    void Log(string message);
-}
-
-public class ConsoleLogger : ILogger
-{
-    public void Log(string message)
+    if (Random.Shared.Next(2) < 1)
     {
-        Console.WriteLine(message);
+        Error error = new Error(ErrorType.Unexpected, "ConsoleApp.Random", "Random error has occured");
+        return error;
     }
+
+    return 5;
 }

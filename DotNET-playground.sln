@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carbook.Domain", "Carbook.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Carbook.Persistence", "Carbook.Persistence\Carbook.Persistence.csproj", "{8CABD39D-0A93-45F6-8C86-8BBFF23BB5FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FazApp.Result", "FazApp.Result\FazApp.Result.csproj", "{F6F02463-2726-4091-9EA2-556AA84ACBA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,9 @@ Global
 		{8CABD39D-0A93-45F6-8C86-8BBFF23BB5FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CABD39D-0A93-45F6-8C86-8BBFF23BB5FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CABD39D-0A93-45F6-8C86-8BBFF23BB5FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6F02463-2726-4091-9EA2-556AA84ACBA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6F02463-2726-4091-9EA2-556AA84ACBA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6F02463-2726-4091-9EA2-556AA84ACBA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6F02463-2726-4091-9EA2-556AA84ACBA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
