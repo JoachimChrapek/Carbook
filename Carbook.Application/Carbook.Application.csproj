@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Carbook.Domain\Carbook.Domain.csproj" />
+      <ProjectReference Include="..\FazApp.Result\FazApp.Result.csproj" />
     </ItemGroup>
 
     <ItemGroup>

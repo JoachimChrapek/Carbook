@@ -2,6 +2,7 @@
 using Carbook.Application.Services;
 using Carbook.Contracts;
 using Carbook.Domain.Cars;
+using FazApp.Result;
 using Microsoft.AspNetCore.Mvc;
 using DomainCarType = Carbook.Domain.Cars.CarType;
 
@@ -22,7 +23,7 @@ public class CarsController : ControllerBase
     public async Task<CreatedAtActionResult> CreateCar(CreateCarRequest request)
     {
         Car car = new (Guid.NewGuid(), (DomainCarType) request.Type, request.Make, request.Model, request.ProductionDate, request.Mileage, DateTime.UtcNow);
-        await _carService.CreateCarAsync(car);
+        Result addCarResult = await _carService.CreateCarAsync(car);
 
         CarResponse response = car.ToCarResponse();
         
@@ -32,14 +33,15 @@ public class CarsController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetCar(Guid id)
     {
-        Car? car = await _carService.GetCarAsync(id);
+        Result<Car> getCarResponse = await _carService.GetCarAsync(id);
 
-        if (car == null)
+        if (getCarResponse.IsError)
         {
+            //TODO handle errors
             return NotFound();
         }
         
-        CarResponse response = car.ToCarResponse();
+        CarResponse response = getCarResponse.Value.ToCarResponse();
         
         return Ok(response);
     }
@@ -48,8 +50,15 @@ public class CarsController : ControllerBase
     [HttpGet("all")]
     public async Task<IActionResult> GetAllCars()
     {
-        IEnumerable<Car> cars = await _carService.GetAllCarsAsync();
-        CarsCollectionResponse response = new(cars.Select(c => c.ToCarResponse()));
+        Result<IEnumerable<Car>> getAllCarsResponse = await _carService.GetAllCarsAsync();
+        
+        if (getAllCarsResponse.IsError)
+        {
+            //TODO handle errors
+            return NotFound();
+        }
+        
+        CarsCollectionResponse response = new(getAllCarsResponse.Value.Select(c => c.ToCarResponse()));
 
         return Ok(response);
     }

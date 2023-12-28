@@ -1,5 +1,6 @@
 ﻿using Carbook.Application.Logging;
 using Carbook.Domain.Cars;
+using FazApp.Result;
 using Microsoft.Extensions.Logging;
 
 namespace Carbook.Application.Services;
@@ -16,31 +17,31 @@ public class LoggedCarService : ICarService
         _logger = logger;
     }
 
-    public async Task CreateCarAsync(Car newCar)
+    public async Task<Result> CreateCarAsync(Car newCar)
     {
         using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(CreateCarAsync)}");
-        await _carService.CreateCarAsync(newCar);
+        return await _carService.CreateCarAsync(newCar);
     }
 
-    public Task<Car?> GetCarAsync(Guid id)
+    public async Task<Result<Car>> GetCarAsync(Guid id)
     {
         using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(GetCarAsync)}");
-        return _carService.GetCarAsync(id);
+        return await _carService.GetCarAsync(id);
     }
 
-    public Task<IEnumerable<Car>> GetAllCarsAsync()
+    public Task<Result<IEnumerable<Car>>> GetAllCarsAsync()
     {
         using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(GetAllCarsAsync)}");
         return _carService.GetAllCarsAsync();
     }
 
-    public Task UpdateCarAsync(Car updatedCar)
+    public Task<Result> UpdateCarAsync(Car updatedCar)
     {
         using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(UpdateCarAsync)}");
         return _carService.UpdateCarAsync(updatedCar);
     }
 
-    public Task DeleteCarAsync(Guid id)
+    public Task<Result> DeleteCarAsync(Guid id)
     {
         using IDisposable _ = _logger.TimedOperation(LogLevel.Information, $"{nameof(DeleteCarAsync)}");
         return _carService.DeleteCarAsync(id);
