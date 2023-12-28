@@ -1,7 +1,6 @@
 ﻿using Carbook.API.Extensions;
 using Carbook.Application.Cars.Commands;
 using Carbook.Application.Cars.Queries;
-using Carbook.Application.Services;
 using Carbook.Contracts;
 using Carbook.Domain.Cars;
 using FazApp.Result;
@@ -11,9 +10,8 @@ using DomainCarType = Carbook.Domain.Cars.CarType;
 
 namespace Carbook.API.Controllers;
 
-[ApiController]
 [Route("[controller]")]
-public class CarsController : ControllerBase
+public class CarsController : ApiController
 {
     private readonly IMediator _mediator;
 
@@ -30,7 +28,7 @@ public class CarsController : ControllerBase
         
         return createCarResult.Match(
             car => CreatedAtAction(nameof(GetCar), new {id = car.Id}, car.ToCarResponse()),
-            errors => Problem());
+            Problem);
     }
     
     [HttpGet("{id:guid}")]
@@ -41,7 +39,7 @@ public class CarsController : ControllerBase
 
         return getCarResult.Match(
             car => Ok(car.ToCarResponse()),
-            errors => Problem());
+            Problem);
     }
     
     //TODO change this - this will be problematic with bigger database
@@ -53,7 +51,7 @@ public class CarsController : ControllerBase
 
         return getAllCarsResult.Match(
             cars => Ok(new CarsCollectionResponse(cars.Select(c => c.ToCarResponse()))),
-            errors => Problem());
+            Problem);
     }
     
     [HttpPut("{id:guid}")]
@@ -64,7 +62,7 @@ public class CarsController : ControllerBase
         
         return updateCarResult.Match(
             car => Ok(car.ToCarResponse()),
-            errors => Problem());
+            Problem);
     }
 
     [HttpDelete("{id:guid}")]
@@ -73,8 +71,8 @@ public class CarsController : ControllerBase
         DeleteCarCommand deleteCarCommand = new(id);
         Result deleteCarResult = await _mediator.Send(deleteCarCommand);
 
-        return deleteCarResult.Match<IActionResult>(
+        return deleteCarResult.Match(
             NoContent,
-            errors => Problem());
+            Problem);
     }
 }
