@@ -1,8 +1,11 @@
 ﻿using Carbook.API.Extensions;
+using Carbook.Application.Cars.Commands;
+using Carbook.Application.Cars.Queries;
 using Carbook.Application.Services;
 using Carbook.Contracts;
 using Carbook.Domain.Cars;
 using FazApp.Result;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using DomainCarType = Carbook.Domain.Cars.CarType;
 
@@ -12,73 +15,66 @@ namespace Carbook.API.Controllers;
 [Route("[controller]")]
 public class CarsController : ControllerBase
 {
-    private readonly ICarService _carService;
+    private readonly IMediator _mediator;
 
-    public CarsController(ICarService carService)
+    public CarsController(IMediator mediator)
     {
-        _carService = carService;
+        _mediator = mediator;
     }
 
     [HttpPost]
-    public async Task<CreatedAtActionResult> CreateCar(CreateCarRequest request)
+    public async Task<IActionResult> CreateCar(CreateCarRequest request)
     {
-        Car car = new (Guid.NewGuid(), (DomainCarType) request.Type, request.Make, request.Model, request.ProductionDate, request.Mileage, DateTime.UtcNow);
-        Result addCarResult = await _carService.CreateCarAsync(car);
-
-        CarResponse response = car.ToCarResponse();
+        CreateCarCommand createCarCommand = new ((DomainCarType)request.Type, request.Make, request.Model, request.ProductionDate, request.Mileage);
+        Result<Car> createCarResult = await _mediator.Send(createCarCommand);
         
-        return CreatedAtAction(nameof(GetCar), new {id = car.Id}, response);
+        return createCarResult.Match(
+            car => CreatedAtAction(nameof(GetCar), new {id = car.Id}, car.ToCarResponse()),
+            errors => Problem());
     }
     
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetCar(Guid id)
     {
-        Result<Car> getCarResponse = await _carService.GetCarAsync(id);
+        GetCarQuery getCarQuery = new (id);
+        Result<Car> getCarResult = await _mediator.Send(getCarQuery);
 
-        if (getCarResponse.IsError)
-        {
-            //TODO handle errors
-            return NotFound();
-        }
-        
-        CarResponse response = getCarResponse.Value.ToCarResponse();
-        
-        return Ok(response);
+        return getCarResult.Match(
+            car => Ok(car.ToCarResponse()),
+            errors => Problem());
     }
     
     //TODO change this - this will be problematic with bigger database
     [HttpGet("all")]
     public async Task<IActionResult> GetAllCars()
     {
-        Result<IEnumerable<Car>> getAllCarsResponse = await _carService.GetAllCarsAsync();
-        
-        if (getAllCarsResponse.IsError)
-        {
-            //TODO handle errors
-            return NotFound();
-        }
-        
-        CarsCollectionResponse response = new(getAllCarsResponse.Value.Select(c => c.ToCarResponse()));
+        GetAllCarsQuery getAllCarsQuery = new ();
+        Result<IEnumerable<Car>> getAllCarsResult = await _mediator.Send(getAllCarsQuery);
 
-        return Ok(response);
+        return getAllCarsResult.Match(
+            cars => Ok(new CarsCollectionResponse(cars.Select(c => c.ToCarResponse()))),
+            errors => Problem());
     }
     
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateCar(Guid id, UpdateCarRequest request)
     {
-        Car car = new (id, (DomainCarType) request.Type, request.Make, request.Model, request.ProductionDate, request.Mileage, DateTime.UtcNow);
-        await _carService.UpdateCarAsync(car);
+        UpdateCarCommand updateCarCommand = new (id, (DomainCarType)request.Type, request.Make, request.Model, request.ProductionDate, request.Mileage);
+        Result<Car> updateCarResult = await _mediator.Send(updateCarCommand);
         
-        CarResponse response = car.ToCarResponse();
-        
-        return CreatedAtAction(nameof(GetCar), new {id = car.Id}, response);
+        return updateCarResult.Match(
+            car => Ok(car.ToCarResponse()),
+            errors => Problem());
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteCar(Guid id)
     {
-        await _carService.DeleteCarAsync(id);
-        
-        return NoContent();
+        DeleteCarCommand deleteCarCommand = new(id);
+        Result deleteCarResult = await _mediator.Send(deleteCarCommand);
+
+        return deleteCarResult.Match<IActionResult>(
+            NoContent,
+            errors => Problem());
     }
 }
