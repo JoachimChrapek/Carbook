@@ -10,15 +10,20 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
     where TResponse : IResult
     
 {
-    private readonly IValidator<TRequest> _validator;
+    private readonly IValidator<TRequest>? _validator;
 
-    public ValidationBehaviour(IValidator<TRequest> validator)
+    public ValidationBehaviour(IValidator<TRequest>? validator = null)
     {
         _validator = validator;
     }
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
+        if (_validator == null)
+        {
+            return await next();
+        }
+        
         ValidationResult? validationResult = await _validator.ValidateAsync(request, cancellationToken);
         
         if (validationResult.IsValid == false)
