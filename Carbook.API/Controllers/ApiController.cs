@@ -1,5 +1,6 @@
 ﻿using FazApp.Result;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Carbook.API.Controllers;
 
@@ -11,6 +12,11 @@ public class ApiController : ControllerBase
         if (errors.Count == 0)
         {
             return Problem();
+        }
+
+        if (errors.All(e => e.Type == ErrorType.Validation))
+        {
+            return ValidationProblem(errors);
         }
 
         return Problem(errors[0]);
@@ -25,5 +31,19 @@ public class ApiController : ControllerBase
         };
         
         return Problem(statusCode: statusCode, detail: error.Description);
+    }
+    
+    protected IActionResult ValidationProblem(List<Error> errors)
+    {
+        ModelStateDictionary modelStateDictionary = new ();
+
+        foreach (Error error in errors)
+        {
+            modelStateDictionary.AddModelError(
+                error.Code,
+                error.Description);
+        }
+
+        return ValidationProblem(modelStateDictionary);
     }
 }
