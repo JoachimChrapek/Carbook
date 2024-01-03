@@ -1,4 +1,4 @@
-﻿namespace Test.ConsoleApp;
+﻿namespace TmpConsoleApp;
 
 public class Calculator
 {
