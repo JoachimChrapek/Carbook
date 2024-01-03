@@ -28,7 +28,7 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
         
         if (validationResult.IsValid == false)
         {
-            List<Error> errors =  validationResult.Errors.Select(e => new Error(ErrorType.Validation, e.ErrorCode, e.ErrorMessage)).ToList();
+            List<Error> errors =  validationResult.Errors.Select(e => new Error(ErrorType.Validation, e.PropertyName, e.ErrorMessage)).ToList();
             return (dynamic)errors;
         }
 
