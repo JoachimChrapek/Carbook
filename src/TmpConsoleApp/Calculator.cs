@@ -22,8 +22,13 @@ public class Calculator
         return num1 - num2;
     }
 
-    public float Division(float num1, float num2)
+    public float Divide(int num1, int num2)
     {
-        return num1 / num2;
+        if (num2 == 0)
+        {
+            throw new DivideByZeroException();
+        }
+        
+        return (float)num1 / num2;
     }
 }
