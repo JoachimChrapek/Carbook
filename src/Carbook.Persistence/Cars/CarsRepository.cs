@@ -6,38 +6,38 @@ namespace Carbook.Persistence.Cars;
 
 public class CarsRepository : ICarsRepository
 {
-    private readonly CarsDbContext _carsDbContext;
+    private readonly CarbookDbContext _carbookDbContext;
 
-    public CarsRepository(CarsDbContext carsDbContext)
+    public CarsRepository(CarbookDbContext carbookDbContext)
     {
-        _carsDbContext = carsDbContext;
+        _carbookDbContext = carbookDbContext;
     }
 
     public async Task AddCarAsync(Car car)
     {
-        await _carsDbContext.Cars.AddAsync(car);
-        await _carsDbContext.SaveChangesAsync();
+        await _carbookDbContext.Cars.AddAsync(car);
+        await _carbookDbContext.SaveChangesAsync();
     }
 
     public async Task UpdateCarAsync(Car car)
     {
-        bool isCarAlreadyAdded = await _carsDbContext.Cars.AnyAsync(c => c.Id == car.Id);
+        bool isCarAlreadyAdded = await _carbookDbContext.Cars.AnyAsync(c => c.Id == car.Id);
         
         if (isCarAlreadyAdded)
         {
-            _carsDbContext.Cars.Update(car);
+            _carbookDbContext.Cars.Update(car);
         }
         else
         {
-            await _carsDbContext.Cars.AddAsync(car);
+            await _carbookDbContext.Cars.AddAsync(car);
         }
 
-        await _carsDbContext.SaveChangesAsync();
+        await _carbookDbContext.SaveChangesAsync();
     }
 
     public async Task DeleteCarAsync(Guid id)
     {
-        Car? car = await _carsDbContext.Cars.FindAsync(id);
+        Car? car = await _carbookDbContext.Cars.FindAsync(id);
 
         if (car == null)
         {
@@ -45,13 +45,13 @@ public class CarsRepository : ICarsRepository
             return;
         }
         
-        _carsDbContext.Remove(car);
-        await _carsDbContext.SaveChangesAsync();
+        _carbookDbContext.Remove(car);
+        await _carbookDbContext.SaveChangesAsync();
     }
 
     public async Task<Car?> GetCarAsync(Guid id)
     {
-        Car? car = await _carsDbContext.Cars.FindAsync(id);
+        Car? car = await _carbookDbContext.Cars.FindAsync(id);
         
         //TODO error if null
         return car;
@@ -59,11 +59,11 @@ public class CarsRepository : ICarsRepository
 
     public async Task<IEnumerable<Car>> GetAllCarsAsync()
     {
-        return await _carsDbContext.Cars.ToListAsync();
+        return await _carbookDbContext.Cars.ToListAsync();
     }
 
     public Task<bool> IsCarAddedAsync(Guid id)
     {
-        return _carsDbContext.Cars.AnyAsync(c => c.Id == id);
+        return _carbookDbContext.Cars.AnyAsync(c => c.Id == id);
     }
 }
