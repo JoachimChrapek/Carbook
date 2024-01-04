@@ -1,26 +1,27 @@
-﻿namespace Carbook.Domain.Users;
+﻿using Carbook.Domain.Authentication;
+
+namespace Carbook.Domain.Users;
 
 public class User
 {
     public Guid Id { get; }
     public string Username { get; }
 
-    //TODO add hashing for password
-    private readonly string _password;
+    private readonly string _hashedPassword;
     
     private User() { }
 
-    public User(Guid id, string username, string password)
+    public User(Guid id, string username, string hashedPassword)
     {
         Id = id;
         Username = username;
-        _password = password;
+        _hashedPassword = hashedPassword;
     }
 
-    public bool IsPasswordCorrect(string passwordToCheck)
+    public bool IsPasswordCorrect(string passwordToCheck, IPasswordHasher passwordHasher)
     {
-        return _password == passwordToCheck;
+        return passwordHasher.IsPasswordCorrect(passwordToCheck, _hashedPassword);
     }
 
-    public static string NameOfPasswordProperty => nameof(_password);
+    public static string NameOfPasswordProperty => nameof(_hashedPassword);
 }

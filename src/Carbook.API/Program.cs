@@ -1,5 +1,6 @@
 using Carbook.API.Setup;
 using Carbook.Application;
+using Carbook.Infrastructure;
 using Carbook.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplication();
 builder.Services.AddPersistence();
+builder.Services.AddInfrastructure();
 
 var app = builder.Build();
 
