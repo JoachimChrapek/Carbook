@@ -10,11 +10,13 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Result<Authenticati
 {
     private readonly IUserRepository _userRepository;
     private readonly IPasswordHasher _passwordHasher;
+    private readonly IJwtTokenGenerator _tokenGenerator;
 
-    public LoginQueryHandler(IUserRepository userRepository, IPasswordHasher passwordHasher)
+    public LoginQueryHandler(IUserRepository userRepository, IPasswordHasher passwordHasher, IJwtTokenGenerator tokenGenerator)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
+        _tokenGenerator = tokenGenerator;
     }
 
     public async Task<Result<AuthenticationResult>> Handle(LoginQuery request, CancellationToken cancellationToken)
@@ -26,7 +28,8 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Result<Authenticati
             return AuthenticationErrors.InvalidCredentials;
         }
 
-        //TODO return token
-        return new AuthenticationResult(user, "TOKEN");
+        string token = _tokenGenerator.GenerateToken(user);
+        
+        return new AuthenticationResult(user, token);
     }
 }
