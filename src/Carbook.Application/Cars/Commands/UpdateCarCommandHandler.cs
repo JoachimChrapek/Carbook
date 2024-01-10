@@ -6,11 +6,11 @@ using MediatR;
 
 namespace Carbook.Application.Cars.Commands;
 
-public class UpdateCarCommandHandle : IRequestHandler<UpdateCarCommand, Result<Car>>
+public class UpdateCarCommandHandler : IRequestHandler<UpdateCarCommand, Result<Car>>
 {
     private readonly ICarsRepository _carsRepository;
 
-    public UpdateCarCommandHandle(ICarsRepository carsRepository)
+    public UpdateCarCommandHandler(ICarsRepository carsRepository)
     {
         _carsRepository = carsRepository;
     }

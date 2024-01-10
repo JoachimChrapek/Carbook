@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Carbook.API\Carbook.API.csproj" />
+      <ProjectReference Include="..\..\src\Carbook.Application\Carbook.Application.csproj" />
+      <ProjectReference Include="..\..\src\Carbook.Domain\Carbook.Domain.csproj" />
+    </ItemGroup>
+
+</Project>
