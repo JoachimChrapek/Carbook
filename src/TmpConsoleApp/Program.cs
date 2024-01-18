@@ -1,65 +1,45 @@
-﻿using FazApp.Result;
+﻿
+using TmpConsoleApp;
 
-Console.WriteLine("Hello, World!");
+TestMethod();
 
-var result1 = DoSomething();
-
-result1.Switch(() =>
-    {
-        Console.WriteLine("DoSomething success");
-    },
-    errors =>
-    {
-        Console.WriteLine("DoSomething had errors");
-
-        foreach (var error in errors)
-        {
-            Console.WriteLine($"[{error.Type}] {error.Code} - {error.Description}");
-        }
-    });
-
-
-
-var result2 = GetSomething();
-
-var result2Value = result2.Match(
-    onValue: value =>
-    {
-        Console.WriteLine($"GetSomething success. Value: {value}");
-        return value;
-    },
-    onError: errors =>
-    {
-        Console.WriteLine("GetSomething had errors");
-
-        foreach (var error in errors)
-        {
-            Console.WriteLine($"[{error.Type}] {error.Code} - {error.Description}");
-        }
-
-        return default;
-    });
-
-return;
-
-Result DoSomething()
+void TestMethod()
 {
-    if (Random.Shared.Next(2) < 1)
-    {
-        Error error = new Error(ErrorType.Unexpected, "ConsoleApp.Random", "Random error has occured");
-        return error;
-    }
+    Console.WriteLine("Test");
 
-    return Result.Success;
+    Calculator calculator = new();
+    TestRecord testRecord = new TestRecord(3, "asd", calculator);
+    TestRecord testRecord2 = new TestRecord(3, "asd", calculator);
+    
+    Console.WriteLine(testRecord == testRecord2);
+
+    TestClass testClass = new TestClass(3, "asd");
+    TestClass2 testClass2 = new TestClass2 {
+        Number = 3,
+        Desc = "asd"
+    };
+    
+    TestRecordStruct testRecordStruct = new TestRecordStruct(3, "asd");
+
+    Console.WriteLine("Test");
 }
 
-Result<int> GetSomething()
+IEnumerable<TestClass> GetClasess(int count)
 {
-    if (Random.Shared.Next(2) < 1)
+    for (int i = 0; i < count; i++)
     {
-        Error error = new Error(ErrorType.Unexpected, "ConsoleApp.Random", "Random error has occured");
-        return error;
+        yield return new TestClass(i, i.ToString());
     }
+}
 
-    return 5;
+public record TestRecord(int Number, string Desc, Calculator Calculator);
+
+public record struct TestRecordStruct(int Number, string Desc);
+
+public class TestClass(int Number, string Desc);
+
+public class TestClass2
+{
+    public required int Number { get; init; }
+    public required string Desc { get; init; }
 }
