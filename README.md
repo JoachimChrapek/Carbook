@@ -13,7 +13,7 @@ A frontend app using Blazor. Aims to facilitate testing some of the backend func
 - Carbook API follows a Clean Architecture approach. Also uses CQRS pattern using MediatR
 - Entity Framework Core with SQLite database
 - implemented Result pattern
-- WIP unit tests using xUnity, NSubstitute and FluentAssertions
+- WIP unit tests using xUnit, NSubstitute and FluentAssertions
 
 ### Main TODOs
 - authentication and authorization, first steps done using JWT tokens
